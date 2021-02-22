@@ -4,14 +4,20 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        controller.cpp \
+        changecontrollername.cpp \
+        changecontrollertext.cpp \
+        chousemenu.cpp \
         lib.cpp \
         main.cpp \
-        mainmenu.cpp
+        mainmenu.cpp \
+        readcontroller.cpp
 
 HEADERS += \
     book.h \
-    control.h \
+    changecontrollername.h \
+    changecontrollertext.h \
+    chousemenu.h \
     controller.h \
     lib.h \
-    mainmenu.h
+    mainmenu.h \
+    readcontroller.h
