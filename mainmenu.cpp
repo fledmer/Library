@@ -2,7 +2,7 @@
 #include <controller.h>
 #include <chousemenu.h>
 #include <iostream>
-
+#include <verificationcontrol.h>
 using namespace std;
 
 #define Down 80
@@ -11,6 +11,18 @@ using namespace std;
 #define Backspace 8
 
 MainMenu::MainMenu(Lib &lib,Controller **controlCenter):Controller(lib,controlCenter){}
+
+void _delete(Controller **controlCenter,Lib &library,Book *book,Controller *oldControl)
+{
+    int ptr = library.find(book);
+    library[ptr]->_delete();
+    for(int x = ptr;x < library.books_vector.size()-1;x++)
+    {
+        *(library[x]) = *(library[x+1]);
+    }
+    library.books_vector.pop_back();
+    *controlCenter = oldControl;
+}
 
 int& MainMenu::get_ptr()
 {
@@ -27,18 +39,22 @@ void MainMenu::set_ptr(int x)
         ptr = x;
 }
 
-
 void MainMenu::print_interface()
 {
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|| ";
     if(ptr == 0)
         cout << '>';
-    cout << "..NEW" << endl << endl;
+    cout << "Create new Book" << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     for(int x = 0; x < library.size();x++)
     {
+        cout << "|| ";
         if(x+1 == ptr)
             cout << '>';
-        cout << library[x]->name << endl;
+        cout << to_string(x+1) << "." << library[x]->name << endl;
     }
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 
 }
 
@@ -52,24 +68,20 @@ void MainMenu::request(char command)
     {
         if(ptr > 0)
         {
-            library[ptr-1]->_delete();
-            for(int x = ptr;x < library.books_vector.size()-1;x++)
-            {
-                *(library[x]) = *(library[x+1]);
-            }
-            library.books_vector.pop_back();
+            *controlCenter = new VerificationControl(library,_delete,controlCenter,this,library[ptr-1],"Are you sure you want to delete this book ?");
         }
     }
     if(command == Right)
     {
        if(ptr == 0)
        {
-            *controlcenter = new ChouseMenu(library,controlcenter,library.add());
+            *controlCenter = new ChouseMenu(library,controlCenter,library.add());
        }
        else
        {
-           *controlcenter = new ChouseMenu(library,controlcenter,library.books_vector[ptr-1]);
+           *controlCenter = new ChouseMenu(library,controlCenter,library.books_vector[ptr-1]);
        }
+       delete this;
     }
 
 }

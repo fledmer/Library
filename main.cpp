@@ -16,7 +16,7 @@ int main()
     Lib library;
     Controller *UI;
     UI = new MainMenu(library,&UI);
-    UI->controlcenter = &UI;
+    UI->controlCenter = &UI;
     start:UI->print_interface();
     char command = ' ';
     while(true)
@@ -29,12 +29,15 @@ int main()
                if(command == 13)
                    goto start;
                try {
-                   UI->request(command);
+               UI->request(command);
+               UI->print_interface();
                }  catch (...) {
 
                }
-               UI->print_interface();
                library.save();
         }
     }
 }
+
+
+//Нужно добавить окно проверки согласия пользователя на действие, допустим удаление и код проверить.

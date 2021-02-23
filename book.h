@@ -25,7 +25,13 @@ public:
     {
         ofs.open(path);
         ofs<<name<<std::endl;
-        ofs<<text;
+        for(int x = 0; x < text.size();x++)
+        {
+            if(text[x] == '\n')
+                ofs << std::endl;
+            else
+              ofs << text[x];
+        }
         ofs.close();
     }
     void _delete()

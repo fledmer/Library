@@ -1,6 +1,7 @@
 #include "changecontrollername.h"
 #include <iostream>
 #include <chousemenu.h>
+#include <verificationcontrol.h>
 
 #define Down 80
 #define Up 72
@@ -11,6 +12,11 @@
 
 ChangeControllerName::ChangeControllerName(Lib &lib,Controller **controlCenter,Book *book):Controller(lib,controlCenter),book(book),new_name(book->name)
 {
+}
+
+void back_name(Controller **controlCenter,Lib &library,Book *book,Controller *oldControl)
+{
+    *controlCenter = new ChouseMenu(library,controlCenter,book);
 }
 
 int& ChangeControllerName::get_ptr()
@@ -32,7 +38,9 @@ void ChangeControllerName::set_ptr(int x)
 void ChangeControllerName::print_interface()
 {
     cout << endl << endl;
-    cout <<"New Name::::>"<<new_name;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|| New Name: >"<<new_name << "_<" << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 
 }
 
@@ -42,7 +50,7 @@ void ChangeControllerName::request(char command)
     {
         new_name.pop_back();
         book->name = new_name;
-       *controlcenter = new ChouseMenu(library,controlcenter,book);
+       *controlCenter = new ChouseMenu(library,controlCenter,book);
     }
     else if(command == Backspace)
     {
@@ -51,7 +59,13 @@ void ChangeControllerName::request(char command)
     }
     else if(command == Left)
     {
-        *controlcenter = new ChouseMenu(library,controlcenter,book);
+        if(new_name.size() > 0)
+            new_name.pop_back();
+        if(new_name != book->name)
+            *controlCenter = new VerificationControl(library,back_name,controlCenter,this,book,"Are you sure what you don't want to save it ?");
+        else
+            *controlCenter = new ChouseMenu(library,controlCenter,book);
+        delete this;
     }
     else if(command == Up)
     {

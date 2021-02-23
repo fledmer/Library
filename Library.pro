@@ -10,7 +10,8 @@ SOURCES += \
         lib.cpp \
         main.cpp \
         mainmenu.cpp \
-        readcontroller.cpp
+        readcontroller.cpp \
+        verificationcontrol.cpp
 
 HEADERS += \
     book.h \
@@ -20,4 +21,5 @@ HEADERS += \
     controller.h \
     lib.h \
     mainmenu.h \
-    readcontroller.h
+    readcontroller.h \
+    verificationcontrol.h

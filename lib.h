@@ -25,6 +25,7 @@ public:
     //void sort(){std::sort(books_vector.begin(),books_vector.end(),Book::comp);}
     Book* add();
     int size(){return books_vector.size();}
+    int find(Book *book);
 };
 
 #endif // LIB_H

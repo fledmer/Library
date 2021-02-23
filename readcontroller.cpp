@@ -23,15 +23,19 @@ void ReadController::set_ptr(int x)
 
 void ReadController::print_interface()
 {
-    cout << "Book Name:" << book->name << endl << endl;
-    cout << book->text << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|| Book Name: " << book->name << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl << endl;
+    cout <<book->text << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 }
 
 void ReadController::request(char command)
 {
     if(command == Left)
     {
-        *controlcenter = new ChouseMenu(library,controlcenter,book);
+        *controlCenter = new ChouseMenu(library,controlCenter,book);
+        delete this;
     }
 
 }

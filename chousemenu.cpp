@@ -34,16 +34,23 @@ void ChouseMenu::set_ptr(int x)
 
 void ChouseMenu::print_interface()
 {
-    cout << "Book Name:" << book->name << endl << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|| ";
+    cout << "Book Name: " << book->name << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
+    cout << "|| ";
     if(ptr == 0)
         cout << '>';
     cout << "Read Book" << endl;
+    cout << "|| ";
     if(ptr == 1)
         cout << '>';
     cout << "Change Name" << endl;
+    cout << "|| ";
     if(ptr == 2)
         cout << '>';
     cout << "Change Text" << endl;
+    cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 }
 
 void ChouseMenu::request(char command)
@@ -56,19 +63,21 @@ void ChouseMenu::request(char command)
     {
         if(ptr == 0)
         {
-            *controlcenter = new ReadController(library,controlcenter,book);
+            *controlCenter = new ReadController(library,controlCenter,book);
         }
         else if(ptr == 1)
         {
-            *controlcenter = new ChangeControllerName(library,controlcenter,book);
+            *controlCenter = new ChangeControllerName(library,controlCenter,book);
         }
         else if(ptr == 2)
         {
-            *controlcenter = new ChangeControllerText(library,controlcenter,book);
+            *controlCenter = new ChangeControllerText(library,controlCenter,book);
         }
+        delete this;
     }
     if(command == Left)
     {
-        *controlcenter =new MainMenu(library,controlcenter);
+        *controlCenter =new MainMenu(library,controlCenter);
+        delete this;
     }
 }

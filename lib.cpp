@@ -24,7 +24,7 @@ Lib::Lib()
         getline(reader,name);
         while(getline(reader,buff))              //считываем
         {
-            text += buff;
+            text += buff + '\n';
             buff = "";
         }
         reader.close();
@@ -35,13 +35,29 @@ Lib::Lib()
     //this->sort();
 }
 
+int Lib::find(Book *book)
+{
+    for(int x = 0; x < books_vector.size();x++)
+    {
+        if(book->name == books_vector[x]->name)
+            return x;
+    }
+    return -1;
+}
 
 Book* Lib::add()
 {
+    int count = 0;
     Book *book = new Book();
     book->name = "new_Book";
+    while(find(book) != -1)
+    {
+        count++;
+        book->name = "new_Book "+to_string(count);
+    }
     book->text = "";
     books_vector.push_back(book);
     book->path = "Lib\\"+std::to_string(time(NULL));
     return book;
 }
+
