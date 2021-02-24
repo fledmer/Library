@@ -17,7 +17,7 @@ public:
     VerificationControl(Lib &lib,void (*func)(Controller** ,Lib&,Book*,Controller *),Controller **ControlCenter,
                         Controller *OldController,Book *book,string text);
     void print_interface() override;
-    void request(char command) override;
+    void request(int command) override;
 };
 
 #endif // VERIFICATIONCONTROL_H

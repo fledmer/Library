@@ -13,6 +13,10 @@ using namespace std;
 #define Up 72
 #define Right 77
 #define Left 75
+#define Enter 13
+#define Backspace 8
+#define PgDn 81
+#define PgUp 73
 
 ChouseMenu::ChouseMenu(Lib &lib,Controller **controlCenter,Book *book):Controller(lib,controlCenter),book(book){}
 
@@ -53,13 +57,13 @@ void ChouseMenu::print_interface()
     cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 }
 
-void ChouseMenu::request(char command)
+void ChouseMenu::request(int command)
 {
     if(command == Down)
         set_ptr(ptr+1);
     if(command == Up)
         set_ptr(ptr-1);
-    if(command == Right)
+    if(command == PgDn)
     {
         if(ptr == 0)
         {
@@ -75,7 +79,7 @@ void ChouseMenu::request(char command)
         }
         delete this;
     }
-    if(command == Left)
+    if(command == PgUp)
     {
         *controlCenter =new MainMenu(library,controlCenter);
         delete this;

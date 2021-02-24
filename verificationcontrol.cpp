@@ -7,6 +7,8 @@
 #define Left 75
 #define Enter 13
 #define Backspace 8
+#define PgDn 81
+#define PgUp 73
 
 VerificationControl::VerificationControl(Lib &lib,void (*func)(Controller**,Lib&,Book*,Controller *oldControl)
     ,Controller **controlCenter,Controller *OldController,Book *book,string text):Controller(lib,controlCenter),controlCenter(controlCenter),
@@ -47,17 +49,19 @@ void VerificationControl::print_interface()
 
 }
 
-void VerificationControl::request(char command)
+void VerificationControl::request(int command)
 {
     if(command == Down)
         set_ptr(ptr+1);
     if(command == Up)
         set_ptr(ptr-1);
-    if(command == Right)
+    if(command == PgDn)
     {
         if(ptr == 0)
         {
             func(controlCenter,library,book,oldControl);
+            if(*controlCenter != oldControl)
+                delete oldControl;
         }
         else if(ptr == 1)
         {

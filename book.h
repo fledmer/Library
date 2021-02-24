@@ -38,9 +38,9 @@ public:
     {
         remove(path.c_str());
     }
-    static bool comp(Book a, Book b)
+    static bool comp(Book *a, Book *b)
     {
-        return a.name <= b.name;
+        return a->name <= b->name;
     }
     bool operator==(Book book)
     {

@@ -16,25 +16,38 @@ int main()
     Lib library;
     Controller *UI;
     UI = new MainMenu(library,&UI);
+    int cout_command = 0;
     UI->controlCenter = &UI;
     start:UI->print_interface();
-    char command = ' ';
+    int command = 0;
     while(true)
     {
         if(_kbhit())
-        {
-               //cout << UI << endl;
-               command = _getch();
-               system("cls");
-               if(command == 13)
-                   goto start;
-               try {
-               UI->request(command);
-               UI->print_interface();
-               }  catch (...) {
-
-               }
-               library.save();
+        {            
+            command = _getch();
+            system("cls");
+                        cout << command << endl;
+            if(command == 13)
+               goto start;
+            if(command == 224 || command == 0)
+            {
+                if(kbhit())
+                {
+                    UI->request(_getch());
+                    UI->print_interface();
+                }
+                else
+                {
+                    UI->request(224);
+                    UI->print_interface();
+                }
+            }
+            else
+            {
+                UI->request(command);
+                UI->print_interface();
+            }
+            library.save();
         }
     }
 }

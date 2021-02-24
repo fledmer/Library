@@ -9,7 +9,7 @@ public:
     void set_ptr(int x) override;
     MainMenu(Lib &lib,Controller **ControlCenter);
     void print_interface() override;
-    void request(char command) override;
+    void request(int command) override;
 };
 
 #endif // MAINMENU_H

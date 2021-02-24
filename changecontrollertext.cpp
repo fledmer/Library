@@ -9,8 +9,10 @@
 #define Left 75
 #define Enter 13
 #define Backspace 8
+#define PgDn 81
+#define PgUp 73
 
-string convert_to_string(vector<string> vector)
+string convert_to_string(vector<string> vector)     //Нужно для преобразования вектора строк в 1 строку.
 {
     string text = "";
     for(auto x : vector)
@@ -21,7 +23,8 @@ string convert_to_string(vector<string> vector)
 }
 
 
-ChangeControllerText::ChangeControllerText(Lib &lib,Controller **controlCenter,Book *book):Controller(lib,controlCenter),book(book)
+ChangeControllerText::ChangeControllerText(Lib &lib,Controller **controlCenter,Book *book)
+    :Controller(lib,controlCenter),book(book)
 {
     string text = "";
     for(auto x : book->text)
@@ -36,6 +39,7 @@ ChangeControllerText::ChangeControllerText(Lib &lib,Controller **controlCenter,B
     }
     if(new_text.size() == 0)
         new_text.push_back(text);
+    horizontal_ptr = new_text[0].size();
 }
 
 void back_text(Controller **controlCenter,Lib &library,Book *book,Controller *oldControl)
@@ -43,6 +47,22 @@ void back_text(Controller **controlCenter,Lib &library,Book *book,Controller *ol
     *controlCenter = new ChouseMenu(library,controlCenter,book);
 }
 
+void ChangeControllerText::pushChar(int x)
+{
+    if(horizontal_ptr == new_text[ptr].size())
+        new_text[ptr].push_back(x);
+    else
+    {
+        string first = "";
+        string second = "";
+        for(int x = 0; x < horizontal_ptr;x++)
+            first += new_text[ptr][x];
+        first += x;
+        for(int x = horizontal_ptr;x < new_text[ptr].size();x++)
+            second += new_text[ptr][x];
+        new_text[ptr] = first + second;
+    }
+}
 
 
 int& ChangeControllerText::get_ptr()
@@ -60,6 +80,16 @@ void ChangeControllerText::set_ptr(int x)
         ptr = x;
 }
 
+void ChangeControllerText::set_horizontal_ptr(int x)
+{
+    if(x < 0)
+        horizontal_ptr = new_text[ptr].size();
+    else if(x > new_text[ptr].size())
+        horizontal_ptr = 0;
+    else
+        horizontal_ptr = x;
+}
+
 void ChangeControllerText::print_interface()
 {
     cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
@@ -70,31 +100,32 @@ void ChangeControllerText::print_interface()
         cout << "|| ";
         if(x == ptr)
             cout << ">";
-        cout << new_text[x];
+        for(int y = 0; y < new_text[x].size();y++)
+        {
+            if(y == horizontal_ptr && x == ptr)
+                cout << "_";
+            cout << new_text[x][y];
+        }
+        if(horizontal_ptr == new_text[x].size() && x == ptr)
+            cout << "_";
         if(x == ptr)
-            cout << "_<";
+            cout << "<";
         cout << endl;
     }
     cout << "||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
 }
 
-void ChangeControllerText::request(char command)
+void ChangeControllerText::request(int command)
 {
-    if(command == Right)
-    {
-        string text = "";
-        new_text[ptr].pop_back();
-        for(auto x : new_text)
-            text += x + "\n";
-        book->text = text;
-       *controlCenter = new ChouseMenu(library,controlCenter,book);
-       delete this;
-    }
-    else if(command == Backspace)
+    if(command == Backspace)
     {
         if(new_text[ptr].size() > 0)
         {
-            new_text[ptr].pop_back();
+            if(horizontal_ptr == new_text[ptr].size())
+                new_text[ptr].pop_back();
+            else
+                new_text[ptr].erase(horizontal_ptr-1,1);
+            set_horizontal_ptr(horizontal_ptr-1);
         }
         else if(new_text.size()>1)
         {
@@ -106,16 +137,6 @@ void ChangeControllerText::request(char command)
             set_ptr(ptr-1);
         }
     }
-    else if(command == Left)
-    {
-        if(new_text[ptr].size() > 0)
-            new_text[ptr].pop_back();
-        if(convert_to_string(new_text) != book->text)
-            *controlCenter = new VerificationControl(library,back_text,controlCenter,this,book,"Are you sure what you don't want to save it ?");
-        else
-            *controlCenter = new ChouseMenu(library,controlCenter,book);
-        delete this;
-    }
     else if(command == '\\')
     {
         new_text.push_back("");
@@ -125,24 +146,43 @@ void ChangeControllerText::request(char command)
         }
         new_text[ptr+1] = "";
     }
-    else if(command == Up)
-    {
-        if(new_text[ptr].size()>0)
-            new_text[ptr].pop_back();
-        set_ptr(ptr-1);
-    }
     else if(command == Down)
     {
-        if(new_text[ptr].size()>0)
-            new_text[ptr].pop_back();
+        set_ptr(ptr-1);
+        horizontal_ptr = new_text[ptr].size();
+    }
+    else if(command == Up)
+    {
         set_ptr(ptr+1);
+        horizontal_ptr = new_text[ptr].size();
+    }
+    else if(command == Left)
+    {
+        set_horizontal_ptr(horizontal_ptr-1);
+    }
+    else if(command == Right)
+    {
+        set_horizontal_ptr(horizontal_ptr+1);
+    }
+    else if(command == PgUp)
+    {
+        if(convert_to_string(new_text) != book->text)
+            *controlCenter = new VerificationControl(library,back_text,controlCenter,this,book,"Are you sure what you don't want to save it ?");
+        else
+            *controlCenter = new ChouseMenu(library,controlCenter,book);
+    }
+    else if(command == PgDn)
+    {
+        string text = "";
+        for(auto x : new_text)
+            text += x + "\n";
+        book->text = text;
+       *controlCenter = new ChouseMenu(library,controlCenter,book);
+        delete this;
     }
     else
     {
-        if(command != Down && command != Right && command != Left && command != Up)
-        {
-            new_text[ptr] += command;
-        }
+        pushChar(command);
+        set_horizontal_ptr(horizontal_ptr+1);
     }
-
 }

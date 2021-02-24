@@ -32,7 +32,7 @@ Lib::Lib()
         book->path = p.path().string();
         books_vector.push_back(book);    // Создаем экземпляры книги из txt файла
     }
-    //this->sort();
+    this->sort();
 }
 
 int Lib::find(Book *book)

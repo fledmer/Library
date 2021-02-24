@@ -10,7 +10,7 @@ public:
     int &get_ptr() override;
     void set_ptr(int x) override;
     void print_interface() override;
-    void request(char command) override;
+    void request(int command) override;
 };
 
 #endif // READCONTROLLER_H

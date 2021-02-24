@@ -8,7 +8,11 @@ using namespace std;
 #define Down 80
 #define Up 72
 #define Right 77
+#define Left 75
+#define Enter 13
 #define Backspace 8
+#define PgDn 81
+#define PgUp 73
 
 MainMenu::MainMenu(Lib &lib,Controller **controlCenter):Controller(lib,controlCenter){}
 
@@ -58,7 +62,7 @@ void MainMenu::print_interface()
 
 }
 
-void MainMenu::request(char command)
+void MainMenu::request(int command)
 {
     if(command == Down)
         set_ptr(ptr+1);
@@ -71,7 +75,7 @@ void MainMenu::request(char command)
             *controlCenter = new VerificationControl(library,_delete,controlCenter,this,library[ptr-1],"Are you sure you want to delete this book ?");
         }
     }
-    if(command == Right)
+    if(command == PgDn)
     {
        if(ptr == 0)
        {

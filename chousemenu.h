@@ -11,7 +11,7 @@ public:
     void set_ptr(int x) override;
     ChouseMenu(Lib &lib,Controller **ControlCenter,Book *book);
     void print_interface() override;
-    void request(char command) override;
+    void request(int command) override;
 };
 
 #endif // CHOUSEMENU_H
