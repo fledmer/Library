@@ -26,7 +26,6 @@ int main()
         {            
             command = _getch();
             system("cls");
-                        cout << command << endl;
             if(command == 13)
                goto start;
             if(command == 224 || command == 0)
